@@ -217,6 +217,12 @@ public class MarsEnv extends Environment {
 			{
 				r1.x += add_x;
 				r1.y += add_y;
+				//szélek
+				if (r1.x == getWidth() || r1.x == -1 || r1.y == getHeight() || r1.y == -1 ) 
+				{
+					r1.x -= add_x;
+					r1.y -= add_y;
+				}
 				//ütközés esetén maradunk ahol voltunk
 				if(r1.x == r2.x && r1.y == r2.y || r1.x == r3.x && r1.y == r3.y || r1.x == r4.x && r1.y == r4.y)
 				{
@@ -228,39 +234,20 @@ public class MarsEnv extends Environment {
 					r1.x -= add_x;
 					r1.y -= add_y;
 				}
-				//szélek
-				if (r1.x == getWidth()) 
-				{
-					r1.x--;
-				}
-				if(r1.x == -1)
-				{
-					r1.x++;
-				}
-				if (r1.y == getHeight()) {
-				    r1.y--;
-				}
-				if (r1.y == -1) {
-				    r1.y++;
-				}		
+				
 			}
             else if( ag.equals("r3")  )
 			{
 				r3.x += add_x;
 				r3.y += add_y;
-				//ütközés esetén maradunk ahol voltunk
-				if(r3.x == r2.x && r3.y == r2.y || r1.x == r3.x && r1.y == r3.y || r3.x == r4.x && r3.y == r4.y)
-				{
-					r3.x -= add_x;
-					r3.y -= add_y;
-				}
-				else if(r3.x == 8 && r3.y == 8 || r3.x == 1 && r3.y == 2 || r3.x == 7 && r3.y == 7 || r3.x == 6 && r3.y == 6 || r3.x == 6 && r3.y == 7  || r3.x == 7 && r3.y == 6  ) // ütközés obstacleel
-				{
-					r3.x -= add_x;
-					r3.y -= add_y;
-				}
+				
 				//szélek
-				if (r3.x == getWidth()) 
+				if (r3.x == getWidth() || r3.x == -1 || r3.y == getHeight() || r3.y == -1 ) 
+				{
+					r3.x -= add_x;
+					r3.y -= add_y;
+				}
+				/*if (r3.x == getWidth()) 
 				{
 					r3.x--;
 				}
@@ -273,12 +260,30 @@ public class MarsEnv extends Environment {
 				}
 				if (r3.y == -1) {
 				    r3.y++;
-				}	
+				}*/
+				//ütközés esetén maradunk ahol voltunk
+				if(r3.x == r2.x && r3.y == r2.y || r1.x == r3.x && r1.y == r3.y || r3.x == r4.x && r3.y == r4.y)
+				{
+					r3.x -= add_x;
+					r3.y -= add_y;
+				}
+				else if(r3.x == 8 && r3.y == 8 || r3.x == 1 && r3.y == 2 || r3.x == 7 && r3.y == 7 || r3.x == 6 && r3.y == 6 || r3.x == 6 && r3.y == 7  || r3.x == 7 && r3.y == 6  ) // ütközés obstacleel
+				{
+					r3.x -= add_x;
+					r3.y -= add_y;
+				}
 			}
 			else if( ag.equals("r4")  )
 			{
 				r4.x += add_x;
 				r4.y += add_y;
+				
+				//szélek
+				if (r4.x == getWidth() || r4.x == -1 || r4.y == getHeight() || r4.y == -1 ) 
+				{
+					r4.x -= add_x;
+					r4.y -= add_y;
+				}
 				//ütközés esetén maradunk ahol voltunk
 				if(r4.x == r2.x && r4.y == r2.y || r4.x == r3.x && r4.y == r3.y || r1.x == r4.x && r1.y == r4.y)
 				{
@@ -290,21 +295,6 @@ public class MarsEnv extends Environment {
 					r4.x -= add_x;
 					r4.y -= add_y;
 				}
-				//szélek
-				if (r4.x == getWidth()) 
-				{
-					r4.x--;
-				}
-				if(r4.x == -1)
-				{
-					r4.x++;
-				}
-				if (r4.y == getHeight()) {
-				    r4.y--;
-				}
-				if (r4.y == -1) {
-				    r4.y++;
-				}	
 			}
 			setAgPos(0, r1);
 			setAgPos(2, r3);
