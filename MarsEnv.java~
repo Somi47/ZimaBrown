@@ -45,9 +45,35 @@ public class MarsEnv extends Environment {
             if (action.equals(ns)) {
                 model.nextSlot(ag);
             } else if (action.getFunctor().equals("move_towards")) {
-                int x = (int)((NumberTerm)action.getTerm(0)).solve();
-                int y = (int)((NumberTerm)action.getTerm(1)).solve();
-                model.moveTowards(x,y, ag);
+				if( ag.equals("r1") )
+				{
+					if(model.r1Container < model.maxContainer)
+					{
+						 Location r1Loc = model.getAgPos(0);
+						if (model.hasObject(GARB, r1Loc)) 
+						{
+							model.pickGarb();
+						}
+						else
+						{
+							model.nextSlot(ag);
+						}
+						
+					}
+					else
+					{
+						int x = 4;
+						int y = 4;
+						model.moveTowards(x,y, ag);
+					}
+				}
+				else
+				{
+					int x = (int)((NumberTerm)action.getTerm(0)).solve();
+					int y = (int)((NumberTerm)action.getTerm(1)).solve();
+					model.moveTowards(x,y, ag);
+				}
+                
             } else if (action.equals(pg)) {
                 model.pickGarb();
             } else if (action.equals(dg)) {
@@ -111,6 +137,10 @@ public class MarsEnv extends Environment {
         boolean r1HasGarb = false; // whether r1 is carrying garbage or not
 		boolean r3HasGarb = false; // whether r3 is carrying garbage or not
 		boolean r4HasGarb = false; // whether r4 is carrying garbage or not
+		public int r1Container;
+		int r3Container;
+		int r4Container;
+		int maxContainer = 2;
         Random random = new Random(System.currentTimeMillis());
 
         private MarsModel() {
@@ -130,6 +160,8 @@ public class MarsEnv extends Environment {
 
             // initial location of garbage
             add(GARB, 3, 0);
+			add(GARB, 3, 1);
+			add(GARB, 0, 0);
 			add(GARB, 4, 2);
 			add(GARB, 5, 1);
 			add(GARB, 2, 7);
@@ -163,6 +195,19 @@ public class MarsEnv extends Environment {
 			Location r4 = getAgPos(3);
 			int add_x = rand.nextInt(3)-1;
 			int add_y = rand.nextInt(3)-1;
+			//adding random garbage
+			int percent = rand.nextInt(100);
+			if( percent < 2)
+			{
+				int garb_x = rand.nextInt(9);
+				int garb_y = rand.nextInt(9);
+				if( !(garb_x == r1.x && garb_y == r1.y || garb_x == r2.x && garb_y == r2.y || garb_x == r3.x && garb_y == r3.y || garb_x == r4.x && garb_y == r4.y || garb_x == 1 && garb_y == 2 || garb_x == 7 && garb_y== 7 || garb_x == 6 && garb_y == 6 || garb_x == 6 && garb_y == 7  || garb_x == 7 && garb_y == 6)  )
+				{
+					logger.info("Garbage generated in:" + garb_x +" "+garb_y);
+					add(GARB, garb_x, garb_y);
+				}
+			
+			}
 			if( ag.equals("r1") )
 			{
 				r1.x += add_x;
@@ -343,7 +388,9 @@ public class MarsEnv extends Environment {
                 if (random.nextBoolean() || nerr == MErr) {
                     remove(GARB, getAgPos(0));
                     nerr = 0;
+					r1Container++;
                     r1HasGarb = true;
+					
                 } else {
                     nerr++;
                 }
@@ -375,7 +422,9 @@ public class MarsEnv extends Environment {
         }
         void dropGarb() {
             if (r1HasGarb) {
+				r1Container = 0;
                 r1HasGarb = false;
+				
                 add(GARB, getAgPos(0));
             }
 			if (r3HasGarb) {
@@ -434,7 +483,8 @@ public class MarsEnv extends Environment {
 				if (id == 0) {
 					c = Color.yellow;
 					if (((MarsModel)model).r1HasGarb) {
-						label += " - G";
+						String add_to_label =" - G - " + Integer.toString(((MarsModel)model).r1Container);
+						label += add_to_label;
 						c = Color.orange;
 					}
 				}

@@ -1,8 +1,8 @@
-// mars robot 4
+// mars robot 3
 
 /* Initial beliefs */
 
-at(P) :- pos(P,X,Y) & pos(r4,X,Y).
+at(P) :- pos(P,X,Y) & pos(r3,X,Y).
 
 /* Initial goal */
 
@@ -10,19 +10,19 @@ at(P) :- pos(P,X,Y) & pos(r4,X,Y).
 
 /* Plans */
 
-+!check(slots) : not garbage(r4)
++!check(slots) : not garbage(r3)
    <- next(slot);
       !check(slots).
 +!check(slots).
 
 
 @lg[atomic]
-+garbage(r4) : not .desire(carry_to(r2))
++garbage(r3) : not .desire(carry_to(r2))
    <- !carry_to(r2).
-   
+
 +!carry_to(R)
    <- // remember where to go back
-      ?pos(r4,X,Y);
+      ?pos(r3,X,Y);
       -+pos(last,X,Y);
 
       // carry garbage to r2
@@ -37,7 +37,7 @@ at(P) :- pos(P,X,Y) & pos(r4,X,Y).
       !at(L);
       drop(S).
 
-+!ensure_pick(S) : garbage(r4)
++!ensure_pick(S) : garbage(r3)
    <- pick(garb);
       !ensure_pick(S).
 +!ensure_pick(_).

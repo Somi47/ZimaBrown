@@ -62,8 +62,8 @@ public class MarsEnv extends Environment {
 					}
 					else
 					{
-						int x = 4;
-						int y = 4;
+						int x = (int)((NumberTerm)action.getTerm(0)).solve();
+						int y = (int)((NumberTerm)action.getTerm(1)).solve();
 						model.moveTowards(x,y, ag);
 					}
 				}
@@ -71,13 +71,15 @@ public class MarsEnv extends Environment {
 				{
 					int x = (int)((NumberTerm)action.getTerm(0)).solve();
 					int y = (int)((NumberTerm)action.getTerm(1)).solve();
+					//int x = 4;
+					//int y = 4;
 					model.moveTowards(x,y, ag);
 				}
                 
             } else if (action.equals(pg)) {
                 model.pickGarb();
             } else if (action.equals(dg)) {
-				Thread.sleep(1000);
+				//Thread.sleep(200);
                 model.dropGarb();
             } else if (action.equals(bg)) {
                 model.burnGarb();
@@ -91,7 +93,7 @@ public class MarsEnv extends Environment {
         updatePercepts();
 
         try {
-            Thread.sleep(400);
+            Thread.sleep(200);
         } catch (Exception e) {}
         informAgsEnvironmentChanged();
         return true;
@@ -166,7 +168,7 @@ public class MarsEnv extends Environment {
 			add(GARB, 5, 1);
 			add(GARB, 2, 7);
 			add(GARB, 7, 4);
-			add(GARB, GSize-1, GSize-1);
+		
 			
 			add(OBST, 1, 2); // igy tudunk obstaclet hozzáadni, nem az igazi de müködik, garbagenek nézi elöször a cuccos ezért kell a remove garbage is
 			remove(GARB, 1, 2);
@@ -179,6 +181,9 @@ public class MarsEnv extends Environment {
 			remove(GARB, 6, 7);
 			add(OBST, 6, 6); // igy tudunk obstaclet hozzáadni, nem az igazi de müködik, garbagenek nézi elöször a cuccos ezért kell a remove garbage is
 			remove(GARB, 6, 6);
+			
+			add(OBST, 8, 8); // igy tudunk obstaclet hozzáadni, nem az igazi de müködik, garbagenek nézi elöször a cuccos ezért kell a remove garbage is
+			remove(GARB, 8, 8);
 			
 			
             //add(GARB, GSize-1, 0);
@@ -201,7 +206,7 @@ public class MarsEnv extends Environment {
 			{
 				int garb_x = rand.nextInt(9);
 				int garb_y = rand.nextInt(9);
-				if( !(garb_x == r1.x && garb_y == r1.y || garb_x == r2.x && garb_y == r2.y || garb_x == r3.x && garb_y == r3.y || garb_x == r4.x && garb_y == r4.y || garb_x == 1 && garb_y == 2 || garb_x == 7 && garb_y== 7 || garb_x == 6 && garb_y == 6 || garb_x == 6 && garb_y == 7  || garb_x == 7 && garb_y == 6)  )
+				if( !(garb_x == r1.x && garb_y == r1.y || garb_x == r2.x && garb_y == r2.y || garb_x == r3.x && garb_y == r3.y || garb_x == r4.x && garb_y == r4.y || garb_x == 1 && garb_y == 2 || garb_x == 7 && garb_y== 7 || garb_x == 6 && garb_y == 6 || garb_x == 6 && garb_y == 7  || garb_x == 7 && garb_y == 6 || garb_x == 8 && garb_y == 8)  )
 				{
 					logger.info("Garbage generated in:" + garb_x +" "+garb_y);
 					add(GARB, garb_x, garb_y);
@@ -218,7 +223,7 @@ public class MarsEnv extends Environment {
 					r1.x -= add_x;
 					r1.y -= add_y;
 				}
-				else if(r1.x == 1 && r1.y == 2 || r1.x == 7 && r1.y == 7 || r1.x == 6 && r1.y == 6 || r1.x == 6 && r1.y == 7  || r1.x == 7 && r1.y == 6  ) // ütközés obstacleel
+				else if(r1.x == 8 && r1.y == 8 || r1.x == 1 && r1.y == 2 || r1.x == 7 && r1.y == 7 || r1.x == 6 && r1.y == 6 || r1.x == 6 && r1.y == 7  || r1.x == 7 && r1.y == 6  ) // ütközés obstacleel
 				{
 					r1.x -= add_x;
 					r1.y -= add_y;
@@ -249,7 +254,7 @@ public class MarsEnv extends Environment {
 					r3.x -= add_x;
 					r3.y -= add_y;
 				}
-				else if(r3.x == 1 && r3.y == 2 || r3.x == 7 && r3.y == 7 || r3.x == 6 && r3.y == 6 || r3.x == 6 && r3.y == 7  || r3.x == 7 && r3.y == 6  ) // ütközés obstacleel
+				else if(r3.x == 8 && r3.y == 8 || r3.x == 1 && r3.y == 2 || r3.x == 7 && r3.y == 7 || r3.x == 6 && r3.y == 6 || r3.x == 6 && r3.y == 7  || r3.x == 7 && r3.y == 6  ) // ütközés obstacleel
 				{
 					r3.x -= add_x;
 					r3.y -= add_y;
@@ -280,7 +285,7 @@ public class MarsEnv extends Environment {
 					r4.x -= add_x;
 					r4.y -= add_y;
 				}
-				else if(r4.x == 1 && r4.y == 2 || r4.x == 7 && r4.y == 7 || r4.x == 6 && r4.y == 6 || r4.x == 6 && r4.y == 7  || r4.x == 7 && r4.y == 6  ) // ütközés obstacleel
+				else if(r4.x == 8 && r4.y == 8 || r4.x == 1 && r4.y == 2 || r4.x == 7 && r4.y == 7 || r4.x == 6 && r4.y == 6 || r4.x == 6 && r4.y == 7  || r4.x == 7 && r4.y == 6  ) // ütközés obstacleel
 				{
 					r4.x -= add_x;
 					r4.y -= add_y;
@@ -313,7 +318,11 @@ public class MarsEnv extends Environment {
         }
 
         void moveTowards(int x, int y, String ag) throws Exception {
+			Location oldr1 = getAgPos(0);
+			Location oldr3 = getAgPos(2);
+			Location oldr4 = getAgPos(3);
 			Location r1 = getAgPos(0);
+			Location r2 = getAgPos(1);
 			Location r3 = getAgPos(2);
 			Location r4 = getAgPos(3);
 			if( ag.equals("r1") )
@@ -333,7 +342,23 @@ public class MarsEnv extends Environment {
 				else if (r1.y > y)
 				{
 					r1.y--;
-				}	
+				}
+				//ütközés detektálás
+				if(r1HasGarb == true)
+				{
+					if(r1.x == r3.x && r1.y == r3.y || r1.x == r4.x && r1.y == r4.y)
+					{
+						r1.x = oldr1.x;
+						r1.y = oldr1.y;
+					}
+					else if(r1.x == 8 && r1.y == 8 || r1.x == 1 && r1.y == 2 || r1.x == 7 && r1.y == 7 || r1.x == 6 && r1.y == 6 || r1.x == 6 && r1.y == 7  || r1.x == 7 && r1.y == 6  ) // ütközés obstacleel
+					{
+						r1.x = oldr1.x;
+						r1.y = oldr1.y;
+					}
+				}
+				
+				
 			}
 			if( ag.equals("r3") )
 			{
@@ -352,7 +377,21 @@ public class MarsEnv extends Environment {
 				else if (r3.y > y)
 				{
 					r3.y--;
-				}	
+				}
+				//ütközés
+				if(r3HasGarb == true)
+				{
+					if(r1.x == r3.x && r1.y == r3.y || r3.x == r4.x && r3.y == r4.y)
+					{
+						r3.x = oldr3.x;
+						r3.y = oldr3.y;
+					}
+					else if(r3.x == 8 && r3.y == 8 || r3.x == 1 && r3.y == 2 || r3.x == 7 && r3.y == 7 || r3.x == 6 && r3.y == 6 || r3.x == 6 && r3.y == 7  || r3.x == 7 && r3.y == 6  ) // ütközés obstacleel
+					{
+						r3.x = oldr3.x;
+						r3.y = oldr3.y;
+					}
+				}
 			}
             if( ag.equals("r4") )
 			{
@@ -371,7 +410,21 @@ public class MarsEnv extends Environment {
 				else if (r4.y > y)
 				{
 					r4.y--;
-				}	
+				}
+				//ütközés
+				if(r4HasGarb == true)
+				{
+					if(r4.x == r3.x && r4.y == r3.y || r1.x == r4.x && r1.y == r4.y)
+					{
+						r4.x = oldr4.x;
+						r4.y = oldr4.y;
+					}
+					else if(r4.x == 8 && r4.y == 8 || r4.x == 1 && r4.y == 2 || r4.x == 7 && r4.y == 7 || r4.x == 6 && r4.y == 6 || r4.x == 6 && r4.y == 7  || r4.x == 7 && r4.y == 6  ) // ütközés obstacleel
+					{
+						r4.x = oldr4.x;
+						r4.y = oldr4.y;
+					}
+				}
 			}
 			
             setAgPos(0, r1);
@@ -421,7 +474,11 @@ public class MarsEnv extends Environment {
             }
         }
         void dropGarb() {
-            if (r1HasGarb) {
+			Location r1 = getAgPos(0);
+			Location r2 = getAgPos(1);
+			Location r3 = getAgPos(2);
+			Location r4 = getAgPos(3);
+            if (r1HasGarb && r1.x == r2.x && r1.y == r2.y) {
 				r1Container = 0;
                 r1HasGarb = false;
 				
