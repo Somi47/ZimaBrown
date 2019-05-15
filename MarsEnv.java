@@ -43,14 +43,22 @@ public class MarsEnv extends Environment {
         logger.info(ag+" doing: "+ action);
         try {
             if (action.equals(ns)) {
-				if( ag.equals("r1") )
+				if( ag.equals("r1") && model.r1Power <= 0)
 				{
-					if(model.r1Power <= 0)
-					{
-						model.moveTowards(4,4, ag);
-					}
+					model.moveTowards(model.getAgPos(1).x, model.getAgPos(1).y, ag);
 				}
-                model.nextSlot(ag);
+				else if( ag.equals("r3") && model.r3Power <= 0)
+				{
+					model.moveTowards(model.getAgPos(1).x, model.getAgPos(1).y, ag);
+				}
+				else if( ag.equals("r4") && model.r4Power <= 0)
+				{
+					model.moveTowards(model.getAgPos(1).x, model.getAgPos(1).y, ag);
+				}
+				else
+				{
+					model.nextSlot(ag);
+				}
             } else if (action.getFunctor().equals("move_towards")) {
 				if( ag.equals("r1") )
 				{
@@ -256,6 +264,9 @@ public class MarsEnv extends Environment {
 			}
             else if( ag.equals("r3")  )
 			{
+				if(r3Power > 0)
+					r3Power--;
+				
 				r3.x += add_x;
 				r3.y += add_y;
 				
@@ -293,6 +304,9 @@ public class MarsEnv extends Environment {
 			}
 			else if( ag.equals("r4")  )
 			{
+				if(r4Power > 0)
+					r4Power--;
+				
 				r4.x += add_x;
 				r4.y += add_y;
 				
@@ -335,6 +349,9 @@ public class MarsEnv extends Environment {
 			Location r4 = getAgPos(3);
 			if( ag.equals("r1") )
 			{
+				if(r1.x == r2.x && r1.y == r2.y)
+					r1Power = maxPower;
+				
 				if (r1.x < x)
 				{
 					r1.x++;
@@ -370,6 +387,9 @@ public class MarsEnv extends Environment {
 			}
 			if( ag.equals("r3") )
 			{
+				if(r3.x == r2.x && r3.y == r2.y)
+					r3Power = maxPower;
+				
 				if (r3.x < x)
 				{
 					r3.x++;
@@ -403,6 +423,9 @@ public class MarsEnv extends Environment {
 			}
             if( ag.equals("r4") )
 			{
+				if(r4.x == r2.x && r4.y == r2.y)
+					r4Power = maxPower;
+				
 				if (r4.x < x)
 				{
 					r4.x++;
@@ -495,10 +518,12 @@ public class MarsEnv extends Environment {
             }
 			if (r3HasGarb) {
                 r3HasGarb = false;
+				r3Power = maxPower;
                 add(GARB, getAgPos(2));
             }
 			if (r4HasGarb) {
                 r4HasGarb = false;
+				r4Power = maxPower;
                 add(GARB, getAgPos(3));
             }
         }
@@ -557,15 +582,17 @@ public class MarsEnv extends Environment {
 				}
 				if (id == 2) {
 					c = Color.yellow;
+					label += "-P" + Integer.toString(((MarsModel)model).r3Power);
 					if (((MarsModel)model).r3HasGarb) {
-						label += " - G";
+						label += "-G";
 						c = Color.orange;
 					}
 				}
 				if (id == 3) {
 					c = Color.yellow;
+					label += "-P" + Integer.toString(((MarsModel)model).r4Power);
 					if (((MarsModel)model).r4HasGarb) {
-						label += " - G";
+						label += "-G";
 						c = Color.orange;
 					}
 				}
