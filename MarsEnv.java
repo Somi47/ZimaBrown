@@ -43,11 +43,22 @@ public class MarsEnv extends Environment {
         logger.info(ag+" doing: "+ action);
         try {
             if (action.equals(ns)) {
+				if( ag.equals("r1") )
+				{
+					if(model.r1Power <= 0)
+					{
+						model.moveTowards(4,4, ag);
+					}
+				}
                 model.nextSlot(ag);
             } else if (action.getFunctor().equals("move_towards")) {
 				if( ag.equals("r1") )
 				{
-					if(model.r1Container < model.maxContainer)
+					if(model.r1Power <= 0)
+					{
+						model.moveTowards(4,4, ag);
+					}
+					else if(model.r1Container < model.maxContainer)
 					{
 						 Location r1Loc = model.getAgPos(0);
 						if (model.hasObject(GARB, r1Loc)) 
@@ -142,7 +153,11 @@ public class MarsEnv extends Environment {
 		public int r1Container;
 		int r3Container;
 		int r4Container;
+		int r1Power = 30;
+		int r3Power = 30;
+		int r4Power = 30;
 		int maxContainer = 2;
+		int maxPower = 30;
         Random random = new Random(System.currentTimeMillis());
 
         private MarsModel() {
@@ -215,6 +230,9 @@ public class MarsEnv extends Environment {
 			}
 			if( ag.equals("r1") )
 			{
+				if(r1Power > 0)
+					r1Power--;
+				
 				r1.x += add_x;
 				r1.y += add_y;
 				//szélek
@@ -471,6 +489,7 @@ public class MarsEnv extends Environment {
             if (r1HasGarb && r1.x == r2.x && r1.y == r2.y) {
 				r1Container = 0;
                 r1HasGarb = false;
+				r1Power = maxPower;
 				
                 add(GARB, getAgPos(0));
             }
@@ -528,9 +547,10 @@ public class MarsEnv extends Environment {
 				String label = "R"+(id+1);
 				c = Color.blue;
 				if (id == 0) {
+					label += "-P" + Integer.toString(((MarsModel)model).r1Power);
 					c = Color.yellow;
 					if (((MarsModel)model).r1HasGarb) {
-						String add_to_label =" - G - " + Integer.toString(((MarsModel)model).r1Container);
+						String add_to_label ="-G" + Integer.toString(((MarsModel)model).r1Container);
 						label += add_to_label;
 						c = Color.orange;
 					}
