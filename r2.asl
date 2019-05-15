@@ -1,3 +1,3 @@
-// mars robot 2
+// garbage container
 
-+garbage(r2) : true <- burn(garb).
++garbage(r2) : true <- dispose(garb).

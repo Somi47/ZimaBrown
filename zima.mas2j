@@ -1,0 +1,12 @@
+MAS zima {
+
+    infrastructure: Centralised
+
+    environment: FloorEnv
+
+    agents: r1; r2; // r2 a dokkolo többi porszivo
+        r3;
+
+        r4;
+
+}

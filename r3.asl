@@ -1,4 +1,4 @@
-// mars robot 3
+// cleaning robot 3
 
 /* Initial beliefs */
 

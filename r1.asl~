@@ -29,7 +29,7 @@ at(P) :- pos(P,X,Y) & pos(r1,X,Y).
       !take(garb,R);
 
       // goes back and continue to check
-      !at(last);
+      //!at(last);
       !check(slots).
 
 +!take(S,L) : true

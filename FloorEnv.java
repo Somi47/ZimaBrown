@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class MarsEnv extends Environment {
+public class FloorEnv extends Environment {
 
     public static final int GSize = 9; // grid size
     public static final int GARB  = 16; // garbage code in grid model 
@@ -19,21 +19,21 @@ public class MarsEnv extends Environment {
     public static final Term    ns = Literal.parseLiteral("next(slot)");
     public static final Term    pg = Literal.parseLiteral("pick(garb)");
     public static final Term    dg = Literal.parseLiteral("drop(garb)");
-    public static final Term    bg = Literal.parseLiteral("burn(garb)");
+    public static final Term    bg = Literal.parseLiteral("dispose(garb)");
     public static final Literal g1 = Literal.parseLiteral("garbage(r1)");
 	public static final Literal g3 = Literal.parseLiteral("garbage(r3)");
 	public static final Literal g4 = Literal.parseLiteral("garbage(r4)");
     public static final Literal g2 = Literal.parseLiteral("garbage(r2)");
 
-    static Logger logger = Logger.getLogger(MarsEnv.class.getName());
+    static Logger logger = Logger.getLogger(FloorEnv.class.getName());
 
-    private MarsModel model;
-    private MarsView  view;
+    private FloorModel model;
+    private FloorView  view;
 
     @Override
     public void init(String[] args) {
-        model = new MarsModel();
-        view  = new MarsView(model);
+        model = new FloorModel();
+        view  = new FloorView(model);
         model.setView(view);
         updatePercepts();
     }
@@ -101,7 +101,7 @@ public class MarsEnv extends Environment {
 				//Thread.sleep(200);
                 model.dropGarb();
             } else if (action.equals(bg)) {
-                model.burnGarb();
+                model.disposeGarb();
             } else {
                 return false;
             }
@@ -118,7 +118,7 @@ public class MarsEnv extends Environment {
         return true;
     }
 
-    /** creates the agents perception based on the MarsModel */
+    /** creates the agents perception based on the FloorModel */
     void updatePercepts() {
         clearPercepts();
 
@@ -151,7 +151,7 @@ public class MarsEnv extends Environment {
         }
     }
 
-    class MarsModel extends GridWorldModel {
+    class FloorModel extends GridWorldModel {
 
         public static final int MErr = 10; // max error in pick garb
         int nerr; // number of tries of pick garb
@@ -168,7 +168,7 @@ public class MarsEnv extends Environment {
 		int maxPower = 30;
         Random random = new Random(System.currentTimeMillis());
 
-        private MarsModel() {
+        private FloorModel() {
             super(GSize, GSize, 4); // hány ágens a szám!
 
             // initial location of agents
@@ -527,7 +527,7 @@ public class MarsEnv extends Environment {
                 add(GARB, getAgPos(3));
             }
         }
-        void burnGarb() {
+        void disposeGarb() {
             // r2 location has garbage
             if (model.hasObject(GARB, getAgPos(1))) {
                 remove(GARB, getAgPos(1));
@@ -535,9 +535,9 @@ public class MarsEnv extends Environment {
         }
     }
 
-    class MarsView extends GridWorldView {
+    class FloorView extends GridWorldView {
 
-        public MarsView(MarsModel model) {
+        public FloorView(FloorModel model) {
             super(model, "IER HF - Takarito robotok", 600);
             defaultFont = new Font("Arial", Font.BOLD, 18); // change default font
             setVisible(true);
@@ -547,7 +547,7 @@ public class MarsEnv extends Environment {
         /** draw application objects */
         @Override
         public void draw(Graphics g, int x, int y, int object) {
-			if(object == MarsEnv.GARB)
+			if(object == FloorEnv.GARB)
 			{
 				drawGarb(g, x, y);
 			}
@@ -556,10 +556,10 @@ public class MarsEnv extends Environment {
 				drawObst(g, x, y);
 			}
             /*switch (object) {
-            case MarsEnv.GARB:
+            case FloorEnv.GARB:
                 drawGarb(g, x, y);
                 break;
-			case MarsEnv.OBST:
+			case FloorEnv.OBST:
                 drawObst(g, x, y);
                 break;
             }*/
@@ -572,26 +572,26 @@ public class MarsEnv extends Environment {
 				String label = "R"+(id+1);
 				c = Color.blue;
 				if (id == 0) {
-					label += "-P" + Integer.toString(((MarsModel)model).r1Power);
+					label += "-P" + Integer.toString(((FloorModel)model).r1Power);
 					c = Color.yellow;
-					if (((MarsModel)model).r1HasGarb) {
-						String add_to_label ="-G" + Integer.toString(((MarsModel)model).r1Container);
+					if (((FloorModel)model).r1HasGarb) {
+						String add_to_label ="-G" + Integer.toString(((FloorModel)model).r1Container);
 						label += add_to_label;
 						c = Color.orange;
 					}
 				}
 				if (id == 2) {
 					c = Color.yellow;
-					label += "-P" + Integer.toString(((MarsModel)model).r3Power);
-					if (((MarsModel)model).r3HasGarb) {
+					label += "-P" + Integer.toString(((FloorModel)model).r3Power);
+					if (((FloorModel)model).r3HasGarb) {
 						label += "-G";
 						c = Color.orange;
 					}
 				}
 				if (id == 3) {
 					c = Color.yellow;
-					label += "-P" + Integer.toString(((MarsModel)model).r4Power);
-					if (((MarsModel)model).r4HasGarb) {
+					label += "-P" + Integer.toString(((FloorModel)model).r4Power);
+					if (((FloorModel)model).r4HasGarb) {
 						label += "-G";
 						c = Color.orange;
 					}
